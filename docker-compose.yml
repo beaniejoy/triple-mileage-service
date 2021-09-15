@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     env_file:
-      - app.env
+      - env/app.env
     depends_on:
       - db-mysql
   triple-mileage-app-2:
@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     env_file:
-      - app.env
+      - env/app.env
     depends_on:
       - db-mysql
   db-mysql:
@@ -31,4 +31,4 @@ services:
     ports:
       - "3306:3306"
     env_file:
-      - mysql.env
+      - env/mysql.env
