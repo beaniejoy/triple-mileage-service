@@ -18,6 +18,7 @@ services:
       - env/app.env
     depends_on:
       - db-mysql
+      - kafka
   triple-mileage-app-2:
     build:
       context: .
@@ -26,9 +27,27 @@ services:
       - env/app.env
     depends_on:
       - db-mysql
+      - kafka
   db-mysql:
     image: mysql:5.7.34
     ports:
       - "3306:3306"
     env_file:
       - env/mysql.env
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
