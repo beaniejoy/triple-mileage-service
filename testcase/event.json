@@ -1,0 +1,9 @@
+{
+  "type": "REVIEW",
+  "action": "ADD",
+  "reviewId": "",
+  "content": "여기 정말 좋네요!",
+  "attachedPhotoIds": [],
+  "userId": "",
+  "placeId": ""
+}
