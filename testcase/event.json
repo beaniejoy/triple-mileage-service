@@ -1,9 +1,9 @@
 {
   "type": "REVIEW",
   "action": "ADD",
-  "reviewId": "",
+  "reviewId": "239e65e5-16df-11ec-94d2-0242ac110002",
   "content": "여기 정말 좋네요!",
-  "attachedPhotoIds": [],
-  "userId": "",
-  "placeId": ""
+  "attachedPhotoIds": ["316d9e4a-1705-11ec-b4d9-0242ac1a0002", "16f0ed96-16f3-11ec-a8f6-0242ac140002"],
+  "userId": "2c2a45ad-1705-11ec-b4d9-0242ac1a0002",
+  "placeId": "bca43723-17cd-11ec-9445-0242ac120002"
 }

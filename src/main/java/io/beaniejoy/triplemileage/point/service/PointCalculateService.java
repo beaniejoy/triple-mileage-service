@@ -3,10 +3,10 @@ package io.beaniejoy.triplemileage.point.service;
 import io.beaniejoy.triplemileage.event.message.PointEvent;
 import io.beaniejoy.triplemileage.point.domain.*;
 import io.beaniejoy.triplemileage.point.exception.AlreadyReviewAddedException;
+import io.beaniejoy.triplemileage.point.exception.PlaceReviewCountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -26,6 +26,8 @@ public class PointCalculateService {
     private final PointRemainRepository pointRemainRepository;
 
     private final PointTotalRepository pointTotalRepository;
+
+    private final PlaceReviewCountRepository placeReviewCountRepository;
 
     @Transactional
     public void addReviewPoint(PointEvent pointEvent) {
@@ -93,10 +95,10 @@ public class PointCalculateService {
                     .build());
 
         // 조건 3. 해당 장소에 대한 첫 리뷰글인 경우 (+1)
-        Optional<PointRemain> firstReviewPointAtPlace
-                = pointRemainRepository.findByPlaceIdAndPointType(placeId, PointType.FIRST);
+        PlaceReviewCount placeReviewCount = placeReviewCountRepository.findByPlaceId(placeId)
+                .orElseThrow(() -> new PlaceReviewCountNotFoundException(placeId));
 
-        if (firstReviewPointAtPlace.isEmpty())
+        if (placeReviewCount.getReviewCount() == 0)
             pointHistoriesTobeSaved.add(PointHistory.builder()
                     .point((byte) 1)
                     .pointType(PointType.FIRST)
@@ -104,6 +106,8 @@ public class PointCalculateService {
                     .userId(userId)
                     .placeId(placeId)
                     .build());
+
+        placeReviewCount.addReviewCount();
 
         return pointHistoriesTobeSaved;
     }
