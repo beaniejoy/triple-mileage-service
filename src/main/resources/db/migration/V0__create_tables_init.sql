@@ -22,8 +22,7 @@ CREATE TABLE `point_remain` (
     `registered_date` datetime,
     `updated_date` datetime,
     PRIMARY KEY (`remain_id`),
-    INDEX `idx_search_remain` (`user_id`, `place_id`),
-    INDEX `idx_search_first` (`place_id`, `point_type`)
+    INDEX `idx_search_remain` (`user_id`, `place_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `point_total` (
