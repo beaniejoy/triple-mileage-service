@@ -28,11 +28,7 @@ public class PointCalculateService {
     private final PointHistoryService pointHistoryService;
 
     @Transactional
-    public void addReviewPoint(PointEvent pointEvent) {
-        log.info("Point calculate Review Action: " + pointEvent.getActionType());
-
-        UUID userId = UUID.fromString(pointEvent.getUserId());
-        UUID placeId = UUID.fromString(pointEvent.getPlaceId());
+    public void addReviewPoint(UUID userId, UUID placeId, PointEvent pointEvent) {
 
         // 1. point_remain 내 기존 유효한 포인트 존재 여부 체크
         List<PointRemain> pointRemainList = pointRemainRepository.findAllByUserIdAndPlaceId(userId, placeId);
@@ -40,7 +36,8 @@ public class PointCalculateService {
             throw new AlreadyReviewAddedException(userId, placeId);
 
         // 2. point_history 포인트 이력 저장 & point_remain 유효한 포인트 데이터 저장
-        List<PointHistory> pointHistoryList = pointHistoryService.createPointHistoryListWhenAddReview(userId, placeId, pointEvent);
+        List<PointHistory> pointHistoryList
+                = pointHistoryService.createPointHistoryListWhenAddReview(userId, placeId, pointEvent);
         saveAllPointHistoryAndRemainList(pointHistoryList);
 
         // 3. 갱신된 사용자 유효 포인트 총점 조회
@@ -50,11 +47,7 @@ public class PointCalculateService {
     }
 
     @Transactional
-    public void modifyReviewPoint(PointEvent pointEvent) {
-        log.info("Point calculate Review Action: " + pointEvent.getActionType());
-
-        UUID userId = UUID.fromString(pointEvent.getUserId());
-        UUID placeId = UUID.fromString(pointEvent.getPlaceId());
+    public void modifyReviewPoint(UUID userId, UUID placeId, PointEvent pointEvent) {
 
         // 1. point_remain 내 기존 유효한 포인트 존재 여부 체크
         List<PointRemain> pointRemainList = pointRemainRepository.findAllByUserIdAndPlaceId(userId, placeId);
@@ -62,7 +55,8 @@ public class PointCalculateService {
             throw new ReviewPointNotExistedException(userId, placeId);
 
         // 2. point_history 포인트 이력 저장 & point_remain 유효한 포인트 데이터 저장
-        List<PointHistory> pointHistoryList = pointHistoryService.createPointHistoryListWhenModifyReview(userId, placeId, pointEvent);
+        List<PointHistory> pointHistoryList
+                = pointHistoryService.createPointHistoryListWhenModifyReview(userId, placeId, pointEvent);
         saveAllPointHistoryAndRemainList(pointHistoryList);
 
         // 3. 갱신된 사용자 유효 포인트 총점 조회
@@ -72,8 +66,20 @@ public class PointCalculateService {
     }
 
     @Transactional
-    public void deleteReviewPoint(PointEvent pointEvent) {
-        log.info("Point calculate Review Action: " + pointEvent.getActionType());
+    public void deleteReviewPoint(UUID userId, UUID placeId, PointEvent pointEvent) {
+
+        // 1. point_remain 내 기존 유효한 포인트 존재 여부 체크
+        List<PointRemain> pointRemainList = pointRemainRepository.findAllByUserIdAndPlaceId(userId, placeId);
+        if (pointRemainList.isEmpty())
+            throw new ReviewPointNotExistedException(userId, placeId);
+
+        // 2. point_history 포인트 이력 저장 & point_remain 유효한 포인트 데이터 저장
+        List<PointHistory> pointHistoryList
+                = pointHistoryService.createPointHistoryListWhenDeleteReview(userId, placeId, pointRemainList);
+        saveAllPointHistoryAndRemainList(pointHistoryList);
+
+        // 3. 갱신된 사용자 유효 포인트 총점 조회
+        calculateUpdatedActivePoints(userId);
     }
 
     private void saveAllPointHistoryAndRemainList(List<PointHistory> pointHistoryList) {
@@ -90,7 +96,9 @@ public class PointCalculateService {
      */
     private List<PointRemain> convertToPointRemainList(List<PointHistory> pointHistoryList) {
         return pointHistoryList.stream()
-                .filter(pointHistory -> pointHistory.getPointType() != PointType.DEL_ALL_PHOTO)
+                .filter(pointHistory
+                        -> (pointHistory.getPointType() != PointType.DEL_ALL_PHOTO)
+                        && (pointHistory.getPointType() != PointType.DEL_REVIEW))
                 .map(PointHistory::toPointRemainEntity)
                 .collect(Collectors.toList());
     }

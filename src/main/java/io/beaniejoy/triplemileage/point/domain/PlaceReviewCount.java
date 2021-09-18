@@ -19,7 +19,6 @@ public class PlaceReviewCount extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewCountId;
 
-
     @Column(columnDefinition = "BINARY(16)")
     private UUID placeId;
 
@@ -27,5 +26,9 @@ public class PlaceReviewCount extends BaseTimeEntity {
 
     public void addReviewCount() {
         this.reviewCount++;
+    }
+
+    public void minusReviewCount() {
+        this.reviewCount--;
     }
 }

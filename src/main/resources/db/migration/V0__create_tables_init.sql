@@ -1,5 +1,5 @@
 CREATE TABLE `point_history` (
-    `history_id` binary(16) NOT NULL,
+    `history_id` int NOT NULL AUTO_INCREMENT,
     `point_type` varchar(20) NOT NULL,
     `point` tinyint NOT NULL,
     `user_id` binary(16) NOT NULL,
@@ -8,16 +8,16 @@ CREATE TABLE `point_history` (
     `registered_date` datetime,
     `updated_date` datetime,
     PRIMARY KEY (`history_id`),
-INDEX `idx_user_id` (`user_id`)
+    INDEX `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `point_remain` (
-    `remain_id` binary(16) NOT NULL,
+    `remain_id` int NOT NULL AUTO_INCREMENT,
     `point_type` varchar(20) NOT NULL,
     `point` tinyint NOT NULL,
     `user_id` binary(16) NOT NULL,
     `place_id` binary(16) NOT NULL,
-    `history_id` binary(16) NOT NULL,
+    `history_id` int NOT NULL,
     `expired_date` datetime,
     `registered_date` datetime,
     `updated_date` datetime,
@@ -26,7 +26,7 @@ CREATE TABLE `point_remain` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `point_total` (
-    `total_id` binary(16) NOT NULL,
+    `total_id` int NOT NULL AUTO_INCREMENT,
     `total_remain_point` int NOT NULL,
     `user_id` binary(16) NOT NULL,
     `registered_date` datetime,
