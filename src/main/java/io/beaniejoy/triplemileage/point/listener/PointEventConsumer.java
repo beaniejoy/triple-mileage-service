@@ -34,7 +34,7 @@ public class PointEventConsumer {
                 pointCalculateService.modifyReviewPoint(userId, placeId, pointEvent);
                 break;
             case DELETE:
-                pointCalculateService.deleteReviewPoint(userId, placeId, pointEvent);
+                pointCalculateService.deleteReviewPoint(userId, placeId);
                 break;
             default:
                 throw new ActionNotValidException(String.valueOf(action));

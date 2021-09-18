@@ -1,0 +1,56 @@
+[
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "239e65e5-16df-11ec-94d2-0242ac110002",
+    "content": "첫번째 장소 여기 정말 좋네요!",
+    "attachedPhotoIds": [],
+    "userId": "2c2a45ad-1705-11ec-b4d9-0242ac1a0002",
+    "placeId": "bca43723-17cd-11ec-9445-0242ac120002"
+  },
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "b106a8de-1834-11ec-a95a-0242ac150002",
+    "content": "첫번째 장소 여기 아주아주 좋아요",
+    "attachedPhotoIds": ["316d9e4a-1705-11ec-b4d9-0242ac1a0002", "16f0ed96-16f3-11ec-a8f6-0242ac140002"],
+    "userId": "f8c7a574-17ce-11ec-9445-0242ac120002",
+    "placeId": "bca43723-17cd-11ec-9445-0242ac120002"
+  },
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "ba0a0fd4-1834-11ec-a95a-0242ac150002",
+    "content": "첫번째 장소 여기 good!",
+    "attachedPhotoIds": ["16f0ed96-16f3-11ec-a8f6-0242ac140002"],
+    "userId": "2be6eae3-17cf-11ec-9445-0242ac120002",
+    "placeId": "bca43723-17cd-11ec-9445-0242ac120002"
+  },
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "c2e0606a-1834-11ec-a95a-0242ac150002",
+    "content": "두번째 장소 끝내주네요.",
+    "attachedPhotoIds": ["94c167a7-1834-11ec-a95a-0242ac150002"],
+    "userId": "2c2a45ad-1705-11ec-b4d9-0242ac1a0002",
+    "placeId": "7ef07ee1-1834-11ec-a95a-0242ac150002"
+  },
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "c972ecc9-1834-11ec-a95a-0242ac150002",
+    "content": "두번째 장소 굳굳",
+    "attachedPhotoIds": ["316d9e4a-1705-11ec-b4d9-0242ac1a0002", "16f0ed96-16f3-11ec-a8f6-0242ac140002"],
+    "userId": "f8c7a574-17ce-11ec-9445-0242ac120002",
+    "placeId": "7ef07ee1-1834-11ec-a95a-0242ac150002"
+  },
+  {
+    "type": "REVIEW",
+    "action": "ADD",
+    "reviewId": "cfbd23d1-1834-11ec-a95a-0242ac150002",
+    "content": "두번째 장소 최고!!",
+    "attachedPhotoIds": [],
+    "userId": "2be6eae3-17cf-11ec-9445-0242ac120002",
+    "placeId": "7ef07ee1-1834-11ec-a95a-0242ac150002"
+  }
+]
