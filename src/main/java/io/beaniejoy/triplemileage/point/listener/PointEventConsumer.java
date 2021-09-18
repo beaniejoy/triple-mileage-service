@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,18 +20,21 @@ public class PointEventConsumer {
 
     @KafkaListener(topics = "point_history", groupId = "point")
     public void consumerFromTopic(PointEvent pointEvent) {
-        log.info("consumer message: " + pointEvent.toString());
+        log.info("Point calculate Review Action: " + pointEvent.getActionType());
         ActionType action = pointEvent.getActionType();
+
+        UUID userId = UUID.fromString(pointEvent.getUserId());
+        UUID placeId = UUID.fromString(pointEvent.getPlaceId());
 
         switch (action) {
             case ADD:
-                pointCalculateService.addReviewPoint(pointEvent);
+                pointCalculateService.addReviewPoint(userId, placeId, pointEvent);
                 break;
             case MOD:
-                pointCalculateService.modifyReviewPoint(pointEvent);
+                pointCalculateService.modifyReviewPoint(userId, placeId, pointEvent);
                 break;
             case DELETE:
-                pointCalculateService.deleteReviewPoint(pointEvent);
+                pointCalculateService.deleteReviewPoint(userId, placeId, pointEvent);
                 break;
             default:
                 throw new ActionNotValidException(String.valueOf(action));

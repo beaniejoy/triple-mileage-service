@@ -4,6 +4,7 @@ import io.beaniejoy.triplemileage.event.message.PointEvent;
 import io.beaniejoy.triplemileage.point.domain.*;
 import io.beaniejoy.triplemileage.point.exception.PlaceReviewCountNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PointHistoryService {
@@ -97,6 +99,34 @@ public class PointHistoryService {
                                 .build());
                     }
                 });
+
+        return pointHistoriesTobeSaved;
+    }
+
+    @Transactional
+    public List<PointHistory> createPointHistoryListWhenDeleteReview(UUID userId, UUID placeId, List<PointRemain> pointRemainList) {
+        List<PointHistory> pointHistoriesTobeSaved = new ArrayList<>();
+
+        // 삭제할 리뷰에 해당하는 기존 유효 포인트 총점 계산
+        int totalPointTobeDeleted = pointRemainList.stream().mapToInt(PointRemain::getPoint).sum();
+
+        log.info("삭제 대상 유효 total point: " + totalPointTobeDeleted);
+
+        pointHistoriesTobeSaved.add(PointHistory.builder()
+                .point((byte) (totalPointTobeDeleted * -1))
+                .pointType(PointType.DEL_REVIEW)
+                .userId(userId)
+                .placeId(placeId)
+                .build());
+
+        // point_remain 내 유효한 리뷰 포인트 모두 삭제
+        pointRemainRepository.deleteAll(pointRemainList);
+
+        // place_review_count 해당 장소에 대한 리뷰 카운트 -1
+        PlaceReviewCount placeReviewCount = placeReviewCountRepository.findByPlaceId(placeId)
+                .orElseThrow(() -> new PlaceReviewCountNotFoundException(placeId));
+
+        placeReviewCount.minusReviewCount();
 
         return pointHistoriesTobeSaved;
     }

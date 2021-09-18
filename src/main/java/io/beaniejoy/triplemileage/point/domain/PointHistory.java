@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,10 +18,8 @@ import java.util.UUID;
 @Table(name = "point_history")
 public class PointHistory extends BaseTimeEntity {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID historyId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long historyId;
 
     private Byte point;
 

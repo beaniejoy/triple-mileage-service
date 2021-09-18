@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -18,10 +17,8 @@ import java.util.UUID;
 @Table(name = "point_total")
 public class PointTotal extends BaseTimeEntity {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID totalId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long totalId;
 
     private Integer totalRemainPoint;
 
