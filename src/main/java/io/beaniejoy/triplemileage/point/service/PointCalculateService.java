@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,9 +22,9 @@ public class PointCalculateService {
 
     private final PointRemainRepository pointRemainRepository;
 
-    private final PointTotalRepository pointTotalRepository;
-
     private final PointHistoryService pointHistoryService;
+
+    private final PointTotalService pointTotalService;
 
     @Transactional
     public void addReviewPoint(UUID userId, UUID placeId, PointEvent pointEvent) {
@@ -41,7 +40,7 @@ public class PointCalculateService {
         saveAllPointHistoryAndRemainList(pointHistoryList);
 
         // 3. 갱신된 사용자 유효 포인트 총점 조회
-        calculateUpdatedActivePoints(userId);
+        pointTotalService.updateActivePoints(userId);
 
         log.info("[PointCalculateService - addReviewPoint] 리뷰 생성에 따른 포인트 이력 정산 완료");
     }
@@ -59,8 +58,8 @@ public class PointCalculateService {
                 = pointHistoryService.createPointHistoryListWhenModifyReview(userId, placeId, pointEvent);
         saveAllPointHistoryAndRemainList(pointHistoryList);
 
-        // 3. 갱신된 사용자 유효 포인트 총점 조회
-        calculateUpdatedActivePoints(userId);
+        // 3. 갱신된 사용자 유효 포인트 총점 조회 및 DB 저장
+        pointTotalService.updateActivePoints(userId);
 
         log.info("[PointCalculateService - modifyReviewPoint] 리뷰 수정에 따른 포인트 이력 정산 완료");
     }
@@ -78,8 +77,8 @@ public class PointCalculateService {
                 = pointHistoryService.createPointHistoryListWhenDeleteReview(userId, placeId, pointRemainList);
         saveAllPointHistoryAndRemainList(pointHistoryList);
 
-        // 3. 갱신된 사용자 유효 포인트 총점 조회
-        calculateUpdatedActivePoints(userId);
+        // 3. 갱신된 사용자 유효 포인트 총점 조회 및 DB 저장
+        pointTotalService.updateActivePoints(userId);
     }
 
     private void saveAllPointHistoryAndRemainList(List<PointHistory> pointHistoryList) {
@@ -101,25 +100,6 @@ public class PointCalculateService {
                         && (pointHistory.getPointType() != PointType.DEL_REVIEW))
                 .map(PointHistory::toPointRemainEntity)
                 .collect(Collectors.toList());
-    }
-
-    private void calculateUpdatedActivePoints(UUID userId) {
-        Integer currentUserPoint = pointRemainRepository.sumPointByUserId(userId);
-        log.info("갱신된 user[" + userId + "]의 유효포인트 총점: " + currentUserPoint);
-
-        /*
-        사용자 포인트 총점 데이터 저장
-        1) PointTotal 조회시 데이터 있는 경우: 해당 데이터에 갱신된 포인트 총점 update
-        2) PointTotal 조회시 null 인경우: 새로 PointTotal Entity 저장
-         */
-        Optional<PointTotal> selectedPointTotal = pointTotalRepository.findByUserId(userId);
-
-        selectedPointTotal.ifPresentOrElse(
-                pointTotal -> pointTotal.updateTotalPoint(currentUserPoint),
-                () -> pointTotalRepository.save(PointTotal.builder()
-                        .totalRemainPoint(currentUserPoint)
-                        .userId(userId)
-                        .build()));
     }
 
 }
