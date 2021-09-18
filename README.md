@@ -33,7 +33,7 @@ $ docker-compose up --build
 ```json
 [
   {"user": "2c2a45ad-1705-11ec-b4d9-0242ac1a0002"},
-  {"user": "2c2a45ad-1705-11ec-b4d9-0242ac1a0002"},
+  {"user": "f8c7a574-17ce-11ec-9445-0242ac120002"},
   {"user": "2be6eae3-17cf-11ec-9445-0242ac120002"}
 ]
 ```
