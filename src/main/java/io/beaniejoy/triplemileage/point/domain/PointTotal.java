@@ -1,6 +1,7 @@
 package io.beaniejoy.triplemileage.point.domain;
 
 import io.beaniejoy.triplemileage.common.entity.BaseTimeEntity;
+import io.beaniejoy.triplemileage.point.dto.PointTotalResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +28,11 @@ public class PointTotal extends BaseTimeEntity {
 
     public void updateTotalPoint(Integer totalRemainPoint) {
         this.totalRemainPoint = totalRemainPoint;
+    }
+
+    public PointTotalResponseDto toResponse() {
+        return PointTotalResponseDto.builder()
+                .totalRemainPoint(this.totalRemainPoint)
+                .build();
     }
 }

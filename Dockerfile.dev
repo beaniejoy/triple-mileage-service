@@ -24,10 +24,11 @@ ENV WORK_DIR=/usr/app/
 
 WORKDIR $WORK_DIR
 
-COPY --from=BUILD_IMAGE $WORK_DIR/build/libs/*.jar app.jar
+COPY --from=BUILD_IMAGE $WORK_DIR/build/libs/*.jar tripleapp.jar
 
 ENTRYPOINT ["java", \
 "-jar", \
 "-Dspring.profiles.active=${PROFILE_OPTION}", \
 "-Dspring.datasource.url=${SPRING_DATASOURCE_URL}", \
-"app.jar"]
+"-Dredis.host=${REDIS_HOST}", \
+"tripleapp.jar"]
