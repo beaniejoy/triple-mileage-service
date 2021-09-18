@@ -38,17 +38,6 @@ public class RedisCacheConfig {
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        return redisTemplate;
-    }
-
     @Bean(name = "cacheManager")
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
