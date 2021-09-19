@@ -19,6 +19,16 @@
 $ docker-compose up --build
 ```
 
+## API
+
+```shell
+# 포인트 적립
+POST localhost/events
+
+# 포인트 조회 (사용자별)
+GET localhost/api/point/{userId}
+```
+
 ## Test Case
 
 장소에 대한 테스트 데이터 2개로 설정하였습니다.  
